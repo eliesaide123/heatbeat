@@ -1,0 +1,143 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Valentine's Design System - Soft, Romantic, Playful */
+
+@layer base {
+  :root {
+    /* Romantic Valentine Palette */
+    --background: 350 100% 98%;
+    --foreground: 350 40% 20%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 350 40% 20%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 350 40% 20%;
+
+    /* Main Pink - Romantic Rose */
+    --primary: 350 80% 60%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Soft Coral */
+    --secondary: 15 85% 85%;
+    --secondary-foreground: 350 40% 25%;
+
+    --muted: 350 30% 95%;
+    --muted-foreground: 350 20% 50%;
+
+    /* Warm Coral Accent */
+    --accent: 10 90% 70%;
+    --accent-foreground: 0 0% 100%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 100%;
+
+    --border: 350 30% 90%;
+    --input: 350 30% 90%;
+    --ring: 350 80% 60%;
+
+    --radius: 0.75rem;
+
+    /* Valentine Special Colors */
+    --valentine-pink: 350 80% 70%;
+    --valentine-rose: 340 70% 55%;
+    --valentine-coral: 15 85% 75%;
+    --valentine-peach: 25 90% 85%;
+    --valentine-cream: 30 50% 97%;
+    --valentine-gold: 45 90% 60%;
+    --valentine-red: 0 75% 55%;
+  }
+
+  .dark {
+    /* Keep light mode for romantic aesthetic */
+    --background: 350 100% 98%;
+    --foreground: 350 40% 20%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+}
+
+@layer components {
+  /* Valentine Button Styles */
+  .btn-valentine {
+    @apply px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300;
+    @apply bg-primary text-primary-foreground;
+    box-shadow: 0 4px 20px -2px hsl(350 80% 60% / 0.3);
+  }
+  
+  .btn-valentine:hover {
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 8px 30px -2px hsl(350 80% 60% / 0.4);
+  }
+  
+  .btn-valentine-outline {
+    @apply px-8 py-4 rounded-full font-semibold text-lg transition-all duration-300;
+    @apply bg-white/80 backdrop-blur-sm border-2 border-primary/30 text-primary;
+  }
+  
+  .btn-valentine-outline:hover {
+    @apply border-primary bg-white;
+  }
+  
+  /* Valentine Card */
+  .card-valentine {
+    @apply rounded-3xl p-8 backdrop-blur-sm bg-card;
+    box-shadow: 0 8px 32px -4px hsl(350 40% 30% / 0.1);
+  }
+}
+
+@layer utilities {
+  .text-gradient-romantic {
+    background: linear-gradient(135deg, hsl(350 80% 60%) 0%, hsl(15 85% 65%) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+  
+  .bg-gradient-romantic {
+    background: linear-gradient(135deg, hsl(350 80% 70%) 0%, hsl(15 85% 75%) 50%, hsl(25 90% 85%) 100%);
+  }
+  
+  .bg-gradient-soft {
+    background: linear-gradient(180deg, hsl(350 100% 98%) 0%, hsl(350 50% 95%) 100%);
+  }
+}
+
+@keyframes floatUp {
+  0%, 100% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.6;
+  }
+  90% {
+    opacity: 0.6;
+  }
+  100% {
+    transform: translateY(-100vh) rotate(360deg);
+    opacity: 0;
+  }
+}
+
+@keyframes sparkle {
+  0%, 100% {
+    transform: scale(0) rotate(0deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1) rotate(180deg);
+    opacity: 1;
+  }
+}
