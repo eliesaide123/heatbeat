@@ -31,7 +31,14 @@ export const MainPage = ({ onReset }: MainPageProps) => {
   // Get today's date string
   const getTodayString = () => {
     const today = new Date();
-    return today.toISOString().split("T")[0];
+    // Format the date to YYYY-MM-DD in the specified timezone
+    const formatter = new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+      timeZone: siteConfig.timezone,
+    });
+    return formatter.format(today);
   };
 
   // Check if today is Valentine's Day

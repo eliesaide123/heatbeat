@@ -38,8 +38,8 @@ export const hints: Hint[] = [
   {
     date: "2026-02-09",
     title: "Half Way There! 💫",
-    text: "The countdown continues... I may or may not have made a reservation somewhere special.",
-    //musicLink: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    text: "The countdown continues... I have made a very special reservation.",
+    secretMessage: "I want you to wear your favorite dress and be ready by 6:30 PM, as I already told you. 'Pack light' we have 2 things planned, and I want you to bring your favorite dress with you so you can change after the first activity, and then change outfits again later. For the first one, you can go for a smart casual look, but don’t forget we’ll be taking pictures. The day is very special. I won’t tell you whether it’s Friday or Saturday, you’ll find out later. ❤️",
   },
   {
     date: "2026-02-10",
