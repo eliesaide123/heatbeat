@@ -15,7 +15,7 @@ export const HintCard = ({ hint, isUnlocked, isToday, onUnlock }: HintCardProps)
   const [secretRevealed, setSecretRevealed] = useState(false);
 
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr + "T00:00:00");
+    const date = new Date(dateStr + "T23:00:00");
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 

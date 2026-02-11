@@ -15,7 +15,7 @@ export const HintModal = ({ hint, isOpen, onClose }: HintModalProps) => {
   if (!hint) return null;
 
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr + "T00:00:00");
+    const date = new Date(dateStr + "T23:00:00");
     return date.toLocaleDateString("en-US", {
       weekday: "long",
       month: "long",

@@ -11,8 +11,8 @@ interface PastHintsProps {
 export const PastHints = ({ hints, unlockedDates, onHintClick }: PastHintsProps) => {
   const pastHints = hints.filter((hint) => {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const hintDate = new Date(hint.date + "T00:00:00");
+    today.setHours(23, 0, 0, 0);
+    const hintDate = new Date(hint.date + "T23:00:00");
     return hintDate < today && unlockedDates.includes(hint.date);
   });
 
@@ -21,7 +21,7 @@ export const PastHints = ({ hints, unlockedDates, onHintClick }: PastHintsProps)
   }
 
   const formatDate = (dateStr: string) => {
-    const date = new Date(dateStr + "T00:00:00");
+    const date = new Date(dateStr + "T23:00:00");
     return date.toLocaleDateString("en-US", { month: "short", day: "numeric" });
   };
 
