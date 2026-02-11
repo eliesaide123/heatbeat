@@ -56,8 +56,8 @@ export const hints: Hint[] = [
   {
     date: "2026-02-12",
     title: "The Penultimate Hint 🌹",
-    text: "Fun fact: I've practiced saying 'I love you' in 5 different languages for this.",
-    secretMessage: "Je t'aime, Te amo, Ti amo, Ich liebe dich, 我爱你 💘",
+    text: "Mafine a3tike ktir hints la2anik zakie mannik hayne, yaane kelme zghire btofdahine bas l fie ellik yeh eno awal shi bhebbik w bmut fike w ente ktir mahdoume. Fa hadrile halik on Saturday for 2 special occasions. First, we’ll have a romantic dinner at a place that means a lot to both of us. Then, we’re heading to the best party ever for an experience we’ve never had before!.",
+    secretMessage: "Both places mannun jabal, w tnaynetun ktir helwin. Wente men fatra hkite bel mawdou3 kente rawwahtina. L fie ellik yeh eno l 2 places, yaane kell mahal 5 letters, 1st place 5 letters l esem w 2nd place 5 letters kamen. W tnaynetun l mahallen fiyoun haref l 'O' wel 'U'. Sar fike tfakre hala2 💘",
   },
   {
     date: "2026-02-13",
