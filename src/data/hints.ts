@@ -68,7 +68,7 @@ export const hints: Hint[] = [
   {
     date: "2026-02-14",
     title: "HAPPY VALENTINE'S DAY! 💘🎉",
-    text: "The wait is over! Here's the grand reveal of everything I've been planning...",
+    text: "The wait is over! Here's the grand reveal of everything I've been planning..., 1st place in our future home, 2nd place check the image below",
     image: "/src/assets/images/ziad.jpg",
     secretMessage: "I love you more than words can say. You make every day feel like Valentine's Day. ❤️",    
   },
