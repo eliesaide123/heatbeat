@@ -22,7 +22,7 @@ export const CountdownTimer = () => {
   useEffect(() => {
     const calculateTimeLeft = () => {
       const now = new Date();
-      let targetDate = new Date(siteConfig.targetDate + "T00:00:00");
+      let targetDate = new Date(siteConfig.targetDate + "T20:30:00");
       
       // If target date has passed, set to next year's Feb 14
       if (now > targetDate) {
