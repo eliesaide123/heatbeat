@@ -19,6 +19,7 @@ export const SecretRevealBox = ({ hint14Feb, onUnlock14Feb }: SecretRevealBoxPro
   const [attemptsPerHour, setAttemptsPerHour] = useState(0);
   const [lastAttemptTimestamp, setLastAttemptTimestamp] = useState<number>(0);
   const [isRateLimited, setIsRateLimited] = useState(false);
+  const [cooldownRemaining, setCooldownRemaining] = useState(0); // in seconds
 
   useEffect(() => {
     const storedAttempts = localStorage.getItem("revealAttemptsPerHour");
@@ -35,7 +36,9 @@ export const SecretRevealBox = ({ hint14Feb, onUnlock14Feb }: SecretRevealBoxPro
         setAttemptsPerHour(attempts);
         if (attempts >= 5) {
           setIsRateLimited(true);
-          setError("You've tried too many times! Please wait an hour. ❤️");
+          const remainingMs = ONE_HOUR_MS - (now - timestamp);
+          setCooldownRemaining(Math.ceil(remainingMs / 1000));
+          setError("You've tried too many times! Please wait.");
         }
       } else {
         // More than an hour passed, reset
@@ -46,6 +49,28 @@ export const SecretRevealBox = ({ hint14Feb, onUnlock14Feb }: SecretRevealBoxPro
       }
     }
   }, []);
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout;
+    if (isRateLimited && cooldownRemaining > 0) {
+      timer = setInterval(() => {
+        setCooldownRemaining((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            setIsRateLimited(false);
+            setError("");
+            localStorage.removeItem("revealAttemptsPerHour");
+            localStorage.removeItem("revealLastAttemptTimestamp");
+            setAttemptsPerHour(0);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+
+    return () => clearInterval(timer);
+  }, [isRateLimited, cooldownRemaining]);
 
   const handleChange = (index: number, value: string) => {
     const newOtp = [...otp];
@@ -264,29 +289,51 @@ export const SecretRevealBox = ({ hint14Feb, onUnlock14Feb }: SecretRevealBoxPro
 
                 
 
-                <AnimatePresence>
+                              <AnimatePresence>
 
-                  {error && (
+                
 
-                    <motion.p
+                                {error && (
 
-                      initial={{ opacity: 0, y: -10 }}
+                
 
-                      animate={{ opacity: 1, y: 0 }}
+                                  <motion.p
 
-                      exit={{ opacity: 0 }}
+                
 
-                      className="text-sm text-primary"
+                                    initial={{ opacity: 0, y: -10 }}
 
-                    >
+                
 
-                      {error}
+                                    animate={{ opacity: 1, y: 0 }}
 
-                    </motion.p>
+                
 
-                  )}
+                                    exit={{ opacity: 0 }}
 
-                </AnimatePresence>
+                
+
+                                    className="text-sm text-primary"
+
+                
+
+                                  >
+
+                
+
+                                    {isRateLimited ? `Try again in ${Math.floor(cooldownRemaining / 60)}m ${cooldownRemaining % 60}s` : error}
+
+                
+
+                                  </motion.p>
+
+                
+
+                                )}
+
+                
+
+                              </AnimatePresence>
 
                 <Button
 
