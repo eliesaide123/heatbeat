@@ -192,47 +192,91 @@ export const MainPage = ({ onReset }: MainPageProps) => {
 
   
 
-          {/* Countdown Timer */}
-
-          <motion.div
-
-            initial={{ opacity: 0, y: 20 }}
-
-            animate={{ opacity: 1, y: 0 }}
-
-            transition={{ delay: 0.2 }}
-
-            className="card-valentine mb-8"
-
-          >
-
-            <CountdownTimer />
-
-          </motion.div>
+                    {/* Countdown Timer */}
 
   
 
-          {/* Secret Reveal Box - Only on Valentine's Day */}
+                    <motion.div
 
-          {isValentinesDay() && (
+  
 
-            <motion.div
+                      initial={{ opacity: 0, y: 20 }}
 
-              initial={{ opacity: 0, y: 20 }}
+  
 
-              animate={{ opacity: 1, y: 0 }}
+                      animate={{ opacity: 1, y: 0 }}
 
-              transition={{ delay: 0.25 }}
+  
 
-              className="mb-8"
+                      transition={{ delay: 0.2 }}
 
-            >
+  
 
-              <SecretRevealBox />
+                      className="card-valentine mb-8"
 
-            </motion.div>
+  
 
-          )}
+                    >
+
+  
+
+                      <CountdownTimer />
+
+  
+
+                    </motion.div>
+
+  
+
+          
+
+  
+
+                    {/* Secret Reveal Box */}
+
+  
+
+                    <motion.div
+
+  
+
+                      initial={{ opacity: 0, y: 20 }}
+
+  
+
+                      animate={{ opacity: 1, y: 0 }}
+
+  
+
+                      transition={{ delay: 0.25 }}
+
+  
+
+                      className="mb-8"
+
+  
+
+                    >
+
+  
+
+                      <SecretRevealBox
+
+  
+
+                        hint14Feb={hints.find(h => h.date === "2026-02-14")}
+
+  
+
+                        onUnlock14Feb={() => handleHintClick(hints.find(h => h.date === "2026-02-14")!)}
+
+  
+
+                      />
+
+  
+
+                    </motion.div>
 
   
 

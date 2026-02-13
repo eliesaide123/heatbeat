@@ -69,7 +69,7 @@ export const hints: Hint[] = [
     date: "2026-02-14",
     title: "HAPPY VALENTINE'S DAY! 💘🎉",
     text: "The wait is over! Here's the grand reveal of everything I've been planning..., 1st place in our future home, 2nd place check the image below",
-    image: "/src/assets/images/ziad.jpg",
+    image: "/images/ziad.jpg",
     secretMessage: "I love you more than words can say. You make every day feel like Valentine's Day. ❤️",    
   },
 ];
@@ -90,14 +90,7 @@ export const siteConfig = {
   // Love note for the "Message in a Bottle" section
   loveNote: "From the moment I met you, I knew my life would never be the same. You're my favorite person, my best friend, and my forever valentine. Every day with you feels like a gift, and I can't wait to spend February 14th making you feel as special as you make me feel every single day. 💕",
 
-  // ============================================
-  // 🔐 SECRET REVEAL BOX (Feb 14 only)
-  // ============================================
-  // The secret password to unlock the final reveal
-  secretPassword: "forever",
-  
-  // Hint shown to help guess the password
-  secretPasswordHint: "What do I want us to be? 💕",
+
   
   // The grand reveal message shown after unlocking
   finalRevealMessage: `Here's what I've been planning...
