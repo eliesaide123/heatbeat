@@ -76,16 +76,17 @@ export const SecretRevealBox = ({ hint14Feb, onUnlock14Feb }: SecretRevealBoxPro
     const newOtp = [...otp];
     newOtp[index] = value.slice(-1); // Take only the last character
     setOtp(newOtp);
+    console.log("New OTP array after change:", newOtp);
 
     // Auto-focus to next input
     if (value && index < 5) {
       inputRefs.current[index + 1]?.focus();
     }
-    
+
     // If all digits are entered, try to unlock
     if (newOtp.every(d => d !== "")) {
-      // Add a small delay to allow state to update before calling handleUnlock
-      setTimeout(handleUnlock, 0); 
+      // Pass the newOtp directly to handleUnlock to avoid stale state
+      setTimeout(() => handleUnlock(newOtp), 0);
     }
   };
 
@@ -107,54 +108,29 @@ export const SecretRevealBox = ({ hint14Feb, onUnlock14Feb }: SecretRevealBoxPro
     return messages[Math.min(attemptCount - 1, messages.length - 1)];
   };
 
-  const handleUnlock = () => {
-    if (isRateLimited) {
-      return; // Do nothing if rate limited
-    }
+  const handleUnlock = (finalOtp: string[] = otp) => { // Accept finalOtp as parameter, default to current otp state
+    if (isRateLimited) return;
 
-    const now = Date.now();
-    const ONE_HOUR_MS = 60 * 60 * 1000;
-
-    let currentAttemptsPerHour = attemptsPerHour;
-    let currentLastAttemptTimestamp = lastAttemptTimestamp;
-
-    if (now - currentLastAttemptTimestamp >= ONE_HOUR_MS) {
-      // More than an hour passed, reset attempts
-      currentAttemptsPerHour = 0;
-      currentLastAttemptTimestamp = now;
-      localStorage.setItem("revealAttemptsPerHour", "0");
-      localStorage.setItem("revealLastAttemptTimestamp", now.toString());
-      setAttemptsPerHour(0);
-      setLastAttemptTimestamp(now);
-    }
-
-    currentAttemptsPerHour++;
-    localStorage.setItem("revealAttemptsPerHour", currentAttemptsPerHour.toString());
-    localStorage.setItem("revealLastAttemptTimestamp", now.toString());
-    setAttemptsPerHour(currentAttemptsPerHour);
-    setLastAttemptTimestamp(now);
-
-    if (currentAttemptsPerHour > 5) {
-      setIsRateLimited(true);
-      setError(getErrorMessage(6)); // Use the 6th message for rate limit
-      setOtp(Array(6).fill(""));
-      inputRefs.current[0]?.focus();
-      return;
-    }
-
-    const enteredWord = otp.join("").toLowerCase();
-    if (enteredWord === "ninato") {
+    const enteredWord = finalOtp.join(""); // Use finalOtp here
+    console.log("OTP Array (in handleUnlock):", otp);
+    console.log("Entered Word (in handleUnlock):", enteredWord);
+    console.log("Entered Word (uppercase, in handleUnlock):", enteredWord.toUpperCase());
+    console.log("Comparison result (in handleUnlock):", enteredWord.toUpperCase() === "NINATO");
+    if (enteredWord.toUpperCase() === "NINATO") { // Comparison itself remains .toUpperCase()
       setError("");
-      onUnlock14Feb(); // Call the prop to open the modal
-      
-      // Clear rate limit info on successful unlock
-      localStorage.removeItem("revealAttemptsPerHour");
-      localStorage.removeItem("revealLastAttemptTimestamp");
+      onUnlock14Feb();
+
+      // Reset everything
+      setOtp(Array(6).fill(""));
+      setAttempts(0);
       setAttemptsPerHour(0);
       setLastAttemptTimestamp(0);
       setIsRateLimited(false);
 
-      // Epic confetti celebration
+      localStorage.removeItem("revealAttemptsPerHour");
+      localStorage.removeItem("revealLastAttemptTimestamp");
+
+      // 🎉 Confetti
       const duration = 5000;
       const end = Date.now() + duration;
 
@@ -164,204 +140,201 @@ export const SecretRevealBox = ({ hint14Feb, onUnlock14Feb }: SecretRevealBoxPro
           angle: 60,
           spread: 55,
           origin: { x: 0 },
-          colors: ["#ff6b9d", "#c44569", "#ff8a5c", "#ffd93d"],
         });
         confetti({
           particleCount: 3,
           angle: 120,
           spread: 55,
           origin: { x: 1 },
-          colors: ["#ff6b9d", "#c44569", "#ff8a5c", "#ffd93d"],
         });
 
-        if (Date.now() < end) {
-          requestAnimationFrame(frame);
-        }
+        if (Date.now() < end) requestAnimationFrame(frame);
       };
       frame();
-    } else {
-      setAttempts((prev) => prev + 1);
-      setError(getErrorMessage(attempts + 1));
-      setOtp(Array(6).fill("")); // Clear OTP on incorrect attempt
-      inputRefs.current[0]?.focus(); // Focus first input
+
+      return;
     }
+
+    // ❌ Incorrect word
+    setAttempts((prev) => prev + 1);
+    setError(getErrorMessage(attempts + 1));
+    setOtp(Array(6).fill(""));
+    inputRefs.current[0]?.focus();
   };
 
-  
+  return (
 
-    return (
+    <motion.div
 
-      <motion.div
+      initial={{ opacity: 0, scale: 0.9 }}
 
-        initial={{ opacity: 0, scale: 0.9 }}
+      animate={{ opacity: 1, scale: 1 }}
 
-        animate={{ opacity: 1, scale: 1 }}
+      className="card-valentine overflow-hidden"
 
-        className="card-valentine overflow-hidden"
+    >
 
-      >
+      <AnimatePresence mode="wait">
 
-        <AnimatePresence mode="wait">
+        <motion.div
+
+          key="locked"
+
+          initial={{ opacity: 0 }}
+
+          animate={{ opacity: 1 }}
+
+          exit={{ opacity: 0, scale: 0.8 }}
+
+          className="text-center py-6"
+
+        >
 
           <motion.div
 
-              key="locked"
+            animate={{
 
-              initial={{ opacity: 0 }}
+              rotateY: [0, 10, -10, 0],
 
-              animate={{ opacity: 1 }}
+              scale: [1, 1.05, 1]
 
-              exit={{ opacity: 0, scale: 0.8 }}
+            }}
 
-              className="text-center py-6"
+            transition={{ duration: 2, repeat: Infinity }}
 
-            >
+            className="inline-block mb-4"
 
-              <motion.div
+          >
 
-                animate={{ 
+            <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto">
 
-                  rotateY: [0, 10, -10, 0],
+              <Lock className="text-primary" size={32} />
 
-                  scale: [1, 1.05, 1]
+            </div>
 
-                }}
+          </motion.div>
 
-                transition={{ duration: 2, repeat: Infinity }}
 
-                className="inline-block mb-4"
 
-              >
+          <h3 className="text-xl font-display font-bold text-foreground mb-2">
 
-                <div className="w-16 h-16 rounded-full bg-primary/20 flex items-center justify-center mx-auto">
+            🎁 The Secret Reveal 🎁
 
-                  <Lock className="text-primary" size={32} />
+          </h3>
 
-                </div>
+          <p className="text-muted-foreground mb-6">
 
-              </motion.div>
+            Enter our secret word to unlock the grand plan...
 
-  
+          </p>
 
-              <h3 className="text-xl font-display font-bold text-foreground mb-2">
 
-                🎁 The Secret Reveal 🎁
 
-              </h3>
+          <div className="max-w-xs mx-auto space-y-4">
 
-              <p className="text-muted-foreground mb-6">
+            <div className="flex justify-center gap-2 mb-4">
 
-                Enter our secret word to unlock the grand plan...
+              {otp.map((digit, index) => (
 
-              </p>
+                <Input
 
-  
+                  key={index}
 
-              <div className="max-w-xs mx-auto space-y-4">
+                  type="text"
 
-                <div className="flex justify-center gap-2 mb-4">
+                  maxLength={1}
 
-                  {otp.map((digit, index) => (
+                  value={digit}
 
-                    <Input
+                  onChange={(e) => handleChange(index, e.target.value)}
 
-                      key={index}
+                  onKeyDown={(e) => handleKeyDown(index, e)}
 
-                      type="text"
+                  ref={(el) => (inputRefs.current[index] = el)}
 
-                      maxLength={1}
+                  className="w-10 h-10 text-center text-xl font-bold bg-background/50 border-primary/30 focus:border-primary"
 
-                      value={digit}
+                />
 
-                      onChange={(e) => handleChange(index, e.target.value)}
+              ))}
 
-                      onKeyDown={(e) => handleKeyDown(index, e)}
+            </div>
 
-                      ref={(el) => (inputRefs.current[index] = el)}
 
-                      className="w-10 h-10 text-center text-xl font-bold bg-background/50 border-primary/30 focus:border-primary"
 
-                    />
+            <AnimatePresence>
 
-                  ))}
 
-                </div>
 
-                
+              {error && (
 
-                              <AnimatePresence>
 
-                
 
-                                {error && (
+                <motion.p
 
-                
 
-                                  <motion.p
 
-                
+                  initial={{ opacity: 0, y: -10 }}
 
-                                    initial={{ opacity: 0, y: -10 }}
 
-                
 
-                                    animate={{ opacity: 1, y: 0 }}
+                  animate={{ opacity: 1, y: 0 }}
 
-                
 
-                                    exit={{ opacity: 0 }}
 
-                
+                  exit={{ opacity: 0 }}
 
-                                    className="text-sm text-primary"
 
-                
 
-                                  >
+                  className="text-sm text-primary"
 
-                
 
-                                    {isRateLimited ? `Try again in ${Math.floor(cooldownRemaining / 60)}m ${cooldownRemaining % 60}s` : error}
-
-                
-
-                                  </motion.p>
-
-                
-
-                                )}
-
-                
-
-                              </AnimatePresence>
-
-                <Button
-
-                  onClick={handleUnlock}
-
-                  className="w-full btn-valentine"
-
-                  disabled={otp.some(d => d === "") || isRateLimited}
 
                 >
 
-                  <Unlock size={18} />
 
-                  Unlock the Secret
 
-                </Button>
+                  {isRateLimited ? `Try again in ${Math.floor(cooldownRemaining / 60)}m ${cooldownRemaining % 60}s` : error}
 
-                <p className="text-xs text-muted-foreground/70">
 
-                  Hint: Think about a very special name... 💕
 
-                </p>            </div>
+                </motion.p>
 
-            </motion.div>
 
-        </AnimatePresence>
 
-      </motion.div>
+              )}
 
-    );
+
+
+            </AnimatePresence>
+
+            <Button
+
+              onClick={handleUnlock}
+
+              className="w-full btn-valentine"
+
+              disabled={otp.some(d => d === "") || isRateLimited}
+
+            >
+
+              <Unlock size={18} />
+
+              Unlock the Secret
+
+            </Button>
+
+            <p className="text-xs text-muted-foreground/70">
+
+              Hint: Think about a very special name... 💕, it has a letter 'A'
+
+            </p>            </div>
+
+        </motion.div>
+
+      </AnimatePresence>
+
+    </motion.div>
+
+  );
 };
